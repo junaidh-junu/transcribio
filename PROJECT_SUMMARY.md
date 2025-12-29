@@ -292,10 +292,10 @@ While Transcribio is free, you could monetize:
    - Add screenshots to README
    - Create demo GIF/video
 
-3. **Update package.json**
-   - Change author name
-   - Update repository URL
-   - Verify version number
+3. **Verify package.json**
+   - Author: Junaidh Haneefa ✓
+   - Repository URL: https://github.com/junaidh-junu/transcribio.git ✓
+   - Version: 1.0.0 ✓
 
 4. **Publish**
    ```bash

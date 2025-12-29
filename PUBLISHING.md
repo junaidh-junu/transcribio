@@ -11,22 +11,17 @@ Complete guide to publishing your package to NPM.
   "name": "transcribio",
   "version": "1.0.0",
   "description": "AI-powered audio transcription using Gemini - CLI & Web UI",
-  "author": "Your Name <your.email@example.com>",
+  "author": "Junaidh Haneefa",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOURUSERNAME/transcribio.git"
+    "url": "https://github.com/junaidh-junu/transcribio.git"
   },
-  "homepage": "https://github.com/YOURUSERNAME/transcribio#readme",
+  "homepage": "https://github.com/junaidh-junu/transcribio#readme",
   "bugs": {
-    "url": "https://github.com/YOURUSERNAME/transcribio/issues"
+    "url": "https://github.com/junaidh-junu/transcribio/issues"
   }
 }
 ```
-
-**Replace:**
-- `Your Name` with your name
-- `your.email@example.com` with your email
-- `YOURUSERNAME` with your GitHub username
 
 ### 2. Check Package Name Availability
 
@@ -35,6 +30,7 @@ npm search transcribio
 ```
 
 If taken, choose a different name like:
+
 - `@yourname/transcribio`
 - `transcribio-ai`
 - `gemini-transcribe`
@@ -74,7 +70,7 @@ git add .
 git commit -m "Initial commit: Transcribio v1.0.0"
 
 # Create repo on GitHub, then:
-git remote add origin https://github.com/YOURUSERNAME/transcribio.git
+git remote add origin https://github.com/junaidh-junu/transcribio.git
 git branch -M main
 git push -u origin main
 ```
@@ -82,6 +78,7 @@ git push -u origin main
 ### 6. Add GitHub Topics
 
 On your GitHub repo, add topics:
+
 - `transcription`
 - `audio`
 - `gemini`
@@ -96,19 +93,53 @@ On your GitHub repo, add topics:
 
 Visit [npmjs.com/signup](https://www.npmjs.com/signup) and create an account.
 
-### 2. Login to NPM
+### 2. Enable Two-Factor Authentication (Required for Publishing)
+
+**Important:** NPM requires 2FA or a granular access token to publish packages.
+
+#### Option A: Enable 2FA on your NPM account
+
+1. Visit [npmjs.com/settings/security](https://www.npmjs.com/settings/security)
+2. Click "Enable 2FA" under "Two-Factor Authentication"
+3. Choose your preferred method:
+   - **Authenticator App** (recommended): Use Google Authenticator, Authy, or similar
+   - **SMS**: Receive codes via text message
+4. Follow the setup instructions
+5. Save your backup codes in a secure location
+
+#### Option B: Create a Granular Access Token (Alternative)
+
+If you prefer not to enable 2FA, create a granular access token:
+
+1. Visit [npmjs.com/settings/tokens](https://www.npmjs.com/settings/tokens)
+2. Click "Generate New Token"
+3. Select "Granular Access Token"
+4. Configure:
+   - **Token name**: e.g., "transcribio-publish"
+   - **Expiration**: Choose appropriate duration
+   - **Permissions**: Select "Publish" with "Bypass 2FA" enabled
+5. Copy the token (you won't see it again!)
+6. Use it for authentication:
+
+```bash
+npm login --auth-type=legacy
+# When prompted for password, paste your token instead
+```
+
+### 3. Login to NPM
 
 ```bash
 npm login
 ```
 
 Enter your:
+
 - Username
 - Password
 - Email
 - One-time password (if 2FA enabled)
 
-### 3. Verify Login
+### 4. Verify Login
 
 ```bash
 npm whoami
@@ -116,7 +147,7 @@ npm whoami
 
 Should display your NPM username.
 
-### 4. Test Package
+### 5. Test Package
 
 ```bash
 # Dry run (doesn't actually publish)
@@ -125,7 +156,7 @@ npm publish --dry-run
 
 Check the output to ensure all files are included correctly.
 
-### 5. Publish
+### 6. Publish
 
 ```bash
 npm publish
@@ -133,11 +164,11 @@ npm publish
 
 **First time publishing?** You might need to verify your email first.
 
-### 6. Verify Publication
+### 7. Verify Publication
 
 Visit `https://www.npmjs.com/package/transcribio` (or your package name).
 
-### 7. Test Installation
+### 8. Test Installation
 
 ```bash
 # In a different directory
@@ -188,6 +219,7 @@ npm version major
 ```
 
 This automatically:
+
 - Updates package.json version
 - Creates a git commit
 - Creates a git tag
@@ -205,10 +237,12 @@ npm publish
 ## [1.0.1] - 2024-12-30
 
 ### Fixed
+
 - Bug in audio file validation
 - Improved error messages
 
 ### Added
+
 - Support for AAC audio format
 ```
 
@@ -217,6 +251,7 @@ npm publish
 ### "Package name already exists"
 
 Use a scoped package:
+
 ```bash
 npm publish --access public
 ```
@@ -230,6 +265,7 @@ Check your email and click the verification link from NPM.
 ### "Payment required"
 
 For scoped packages (`@username/package`), you need:
+
 ```bash
 npm publish --access public
 ```
@@ -238,24 +274,56 @@ npm publish --access public
 
 Your package name might be reserved. Choose a different name.
 
+### "403 Forbidden - Two-factor authentication or granular access token required"
+
+This error occurs when trying to publish without 2FA enabled or without a proper access token.
+
+**Solution:**
+
+1. **Enable 2FA** (recommended):
+
+   - Visit [npmjs.com/settings/security](https://www.npmjs.com/settings/security)
+   - Enable 2FA using an authenticator app or SMS
+   - Log out and log back in: `npm logout && npm login`
+   - Try publishing again
+
+2. **Or use a Granular Access Token**:
+   - Visit [npmjs.com/settings/tokens](https://www.npmjs.com/settings/tokens)
+   - Generate a new "Granular Access Token" with "Publish" permission and "Bypass 2FA" enabled
+   - Use the token as your password when logging in:
+     ```bash
+     npm logout
+     npm login --auth-type=legacy
+     # Username: your-username
+     # Password: <paste your token>
+     # Email: your-email@example.com
+     ```
+   - Try publishing again
+
+**Note:** NPM requires 2FA or granular access tokens for all package publishing to enhance security.
+
 ## Best Practices
 
 1. **Semantic Versioning**
+
    - MAJOR: Breaking changes
    - MINOR: New features (backward compatible)
    - PATCH: Bug fixes
 
 2. **Keep README Updated**
+
    - Clear installation instructions
    - Usage examples
    - Screenshots/GIFs
    - API documentation
 
 3. **Maintain CHANGELOG**
+
    - Document all changes
    - Follow [Keep a Changelog](https://keepachangelog.com/)
 
 4. **Use Git Tags**
+
    - Tag each release
    - Makes rollback easier
    - Better version tracking
@@ -275,12 +343,14 @@ Your package name might be reserved. Choose a different name.
 ## Success! 🎉
 
 Once published, your package will be:
+
 - Installable via `npm install -g transcribio`
 - Searchable on npmjs.com
 - Available to millions of developers
 - Part of your public portfolio
 
 Remember to:
+
 - ⭐ Star repos that inspired you
 - 📝 Credit contributors
 - 🐛 Fix bugs quickly

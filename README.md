@@ -36,7 +36,6 @@ transcribio config --set-key
 
 ### 3. Transcribe
 
-
 ```bash
 # Using CLI
 transcribio audio.mp3
@@ -65,15 +64,15 @@ transcribio audio.mp3 --model pro
 
 ### Options
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `-s, --speakers` | Enable speaker detection | true |
-| `-t, --timestamps` | Include timestamps | true |
-| `-l, --language <code>` | Audio language (or 'auto') | auto |
-| `-o, --output <format>` | Format: txt, srt, vtt, json | txt |
-| `-f, --file <path>` | Save output to file | - |
-| `--model <name>` | flash (fast) or pro (accurate) | flash |
-| `--translate <lang>` | Translate to language | - |
+| Option                  | Description                    | Default |
+| ----------------------- | ------------------------------ | ------- |
+| `-s, --speakers`        | Enable speaker detection       | true    |
+| `-t, --timestamps`      | Include timestamps             | true    |
+| `-l, --language <code>` | Audio language (or 'auto')     | auto    |
+| `-o, --output <format>` | Format: txt, srt, vtt, json    | txt     |
+| `-f, --file <path>`     | Save output to file            | -       |
+| `--model <name>`        | flash (fast) or pro (accurate) | flash   |
+| `--translate <lang>`    | Translate to language          | -       |
 
 ### Configuration Commands
 
@@ -97,12 +96,14 @@ transcribio ui
 ```
 
 This opens a browser at `http://localhost:3456` with:
+
 - Drag & drop file upload
 - Real-time progress
 - Multiple export formats
 - Beautiful formatted output
 
 Custom port:
+
 ```bash
 transcribio ui --port 8080
 ```
@@ -110,6 +111,7 @@ transcribio ui --port 8080
 ## Supported Formats
 
 ### Input Audio
+
 - MP3 (`.mp3`)
 - WAV (`.wav`)
 - M4A (`.m4a`)
@@ -121,12 +123,14 @@ transcribio ui --port 8080
 ### Output Formats
 
 #### TXT (Plain Text)
+
 ```
 [00:00] Speaker 1: Hello, welcome to the podcast.
 [00:05] Speaker 2: Thanks for having me!
 ```
 
 #### SRT (SubRip Subtitle)
+
 ```
 1
 00:00:00,000 --> 00:00:05,000
@@ -138,6 +142,7 @@ transcribio ui --port 8080
 ```
 
 #### VTT (WebVTT)
+
 ```
 WEBVTT
 
@@ -151,6 +156,7 @@ WEBVTT
 ```
 
 #### JSON
+
 ```json
 {
   "success": true,
@@ -172,21 +178,25 @@ WEBVTT
 ## Examples
 
 ### Transcribe Interview
+
 ```bash
 transcribio interview.mp3 --speakers --timestamps -f interview.txt
 ```
 
 ### Create Subtitles
+
 ```bash
 transcribio video-audio.wav --output srt -f subtitles.srt
 ```
 
 ### Translate Content
+
 ```bash
 transcribio spanish-audio.mp3 --translate english
 ```
 
 ### High Accuracy Mode
+
 ```bash
 transcribio important-meeting.m4a --model pro --output json -f meeting.json
 ```
@@ -196,24 +206,24 @@ transcribio important-meeting.m4a --model pro --output json -f meeting.json
 Use Transcribio in your Node.js projects:
 
 ```javascript
-import { GeminiService, exportTranscript } from 'transcribio';
+import { GeminiService, exportTranscript } from "transcribio";
 
 // Initialize with API key
-const gemini = new GeminiService('your-api-key');
+const gemini = new GeminiService("your-api-key");
 
 // Transcribe audio
-const result = await gemini.transcribe('audio.mp3', {
+const result = await gemini.transcribe("audio.mp3", {
   speakers: true,
   timestamps: true,
-  language: 'auto',
-  model: 'flash'
+  language: "auto",
+  model: "flash",
 });
 
 // Export to different formats
-const txt = exportTranscript(result, 'txt');
-const srt = exportTranscript(result, 'srt');
-const vtt = exportTranscript(result, 'vtt');
-const json = exportTranscript(result, 'json');
+const txt = exportTranscript(result, "txt");
+const srt = exportTranscript(result, "srt");
+const vtt = exportTranscript(result, "vtt");
+const json = exportTranscript(result, "json");
 
 console.log(result);
 ```
@@ -222,10 +232,10 @@ console.log(result);
 
 Gemini's free tier is generous:
 
-| Model | Daily Requests | Speed | Accuracy |
-|-------|---------------|-------|----------|
-| Flash | ~1,000/day | Fast | Good |
-| Pro | ~50/day | Slower | Excellent |
+| Model | Daily Requests | Speed  | Accuracy  |
+| ----- | -------------- | ------ | --------- |
+| Flash | ~1,000/day     | Fast   | Good      |
+| Pro   | ~50/day        | Slower | Excellent |
 
 Perfect for personal use, podcasts, interviews, and more!
 
@@ -239,6 +249,7 @@ Perfect for personal use, podcasts, interviews, and more!
 ## Troubleshooting
 
 ### API Key Issues
+
 ```bash
 # Check if key is configured
 transcribio config --show
@@ -249,12 +260,15 @@ transcribio config --set-key
 ```
 
 ### File Size Issues
+
 - Files under 20MB: Sent inline (faster)
 - Files over 20MB: Use File API (slower but handles larger files)
 - Maximum: 100MB
 
 ### Unsupported Format
+
 Convert your audio file to a supported format:
+
 ```bash
 # Using ffmpeg
 ffmpeg -i input.mp4 -vn -acodec libmp3lame output.mp3
@@ -263,6 +277,7 @@ ffmpeg -i input.mp4 -vn -acodec libmp3lame output.mp3
 ## Development
 
 ### Clone & Install
+
 ```bash
 git clone https://github.com/junaidh-junu/transcribio.git
 cd transcribio
@@ -270,6 +285,7 @@ npm install
 ```
 
 ### Run Locally
+
 ```bash
 # CLI
 node bin/transcribio.js audio.mp3
@@ -279,11 +295,13 @@ node bin/transcribio.js ui
 ```
 
 ### Run Tests
+
 ```bash
 npm test
 ```
 
 ### Lint Code
+
 ```bash
 npm run lint
 ```
@@ -317,12 +335,14 @@ Contributions are welcome! Please:
 ## Roadmap
 
 ### v2.0.0
+
 - [ ] Batch processing (transcribe multiple files)
 - [ ] YouTube URL support
 - [ ] Word-level timestamps
 - [ ] Custom vocabulary support
 
 ### v3.0.0
+
 - [ ] Real-time transcription
 - [ ] Desktop app (Electron)
 - [ ] Offline mode with local Whisper

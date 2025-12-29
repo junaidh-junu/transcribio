@@ -13,5 +13,14 @@
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/web/public/**/*.js"],
+      "env": {
+        "browser": true,
+        "node": false
+      }
+    }
+  ]
 }
