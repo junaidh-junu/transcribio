@@ -1,0 +1,11 @@
+tests/
+*.test.js
+.eslintrc.json
+.github/
+.vscode/
+.idea/
+*.log
+.DS_Store
+coverage/
+.env
+.env.local

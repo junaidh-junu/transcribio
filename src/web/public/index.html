@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcribio - Audio Transcription</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .drag-active { border-color: #3b82f6 !important; background-color: #eff6ff !important; }
+    .spinner { animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">🎙️ Transcribio</h1>
+      <p class="text-gray-600">AI-powered audio transcription using Gemini</p>
+    </div>
+
+    <!-- Upload Section (shown when idle) -->
+    <div id="upload-section">
+      <!-- Drop Zone -->
+      <div
+        id="drop-zone"
+        class="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center cursor-pointer hover:border-gray-400 bg-white transition-colors"
+      >
+        <div class="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+          </svg>
+        </div>
+        <p class="text-gray-700 font-medium">Drop audio file here or click to upload</p>
+        <p class="text-gray-500 text-sm mt-2">MP3, WAV, M4A, OGG, FLAC (up to 100MB)</p>
+        <input type="file" id="file-input" class="hidden" accept="audio/*">
+      </div>
+
+      <!-- Options -->
+      <div class="mt-6 bg-white rounded-lg border p-6">
+        <h3 class="font-medium text-gray-900 mb-4">Options</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <label class="flex items-center space-x-3 cursor-pointer">
+            <input type="checkbox" id="opt-speakers" checked class="w-4 h-4 text-blue-600 rounded">
+            <span class="text-gray-700">Speaker Detection</span>
+          </label>
+          <label class="flex items-center space-x-3 cursor-pointer">
+            <input type="checkbox" id="opt-timestamps" checked class="w-4 h-4 text-blue-600 rounded">
+            <span class="text-gray-700">Timestamps</span>
+          </label>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Language</label>
+            <select id="opt-language" class="w-full border rounded-lg px-3 py-2">
+              <option value="auto">Auto-detect</option>
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="zh">Chinese</option>
+              <option value="ja">Japanese</option>
+              <option value="ko">Korean</option>
+              <option value="pt">Portuguese</option>
+              <option value="it">Italian</option>
+              <option value="ru">Russian</option>
+              <option value="ar">Arabic</option>
+              <option value="hi">Hindi</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Model</label>
+            <select id="opt-model" class="w-full border rounded-lg px-3 py-2">
+              <option value="flash">Gemini Flash (Fast)</option>
+              <option value="pro">Gemini Pro (Accurate)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Processing Section (shown when transcribing) -->
+    <div id="processing-section" class="hidden">
+      <div class="bg-white rounded-xl border p-12 text-center">
+        <div class="mx-auto w-16 h-16 mb-4 flex items-center justify-center">
+          <svg class="w-12 h-12 text-blue-500 spinner" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Transcribing...</h3>
+        <p id="processing-status" class="text-gray-500">Uploading audio file</p>
+        <p id="file-name" class="text-sm text-gray-400 mt-2"></p>
+      </div>
+    </div>
+
+    <!-- Result Section (shown when complete) -->
+    <div id="result-section" class="hidden">
+      <!-- Metadata -->
+      <div class="bg-white rounded-lg border p-4 mb-4 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <span id="result-language" class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded"></span>
+          <span id="result-duration" class="text-sm text-gray-500"></span>
+        </div>
+        <button id="btn-new" class="text-sm text-blue-600 hover:underline">New Transcription</button>
+      </div>
+
+      <!-- Transcript -->
+      <div class="bg-white rounded-lg border">
+        <div class="flex border-b">
+          <button class="tab-btn px-4 py-3 text-sm font-medium text-blue-600 border-b-2 border-blue-600" data-tab="formatted">Formatted</button>
+          <button class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="plain">Plain Text</button>
+          <button class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="json">JSON</button>
+        </div>
+        <div id="transcript-content" class="p-6 max-h-96 overflow-y-auto">
+          <div id="tab-formatted"></div>
+          <div id="tab-plain" class="hidden whitespace-pre-wrap font-mono text-sm"></div>
+          <div id="tab-json" class="hidden whitespace-pre-wrap font-mono text-sm bg-gray-50 p-4 rounded"></div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div id="summary-section" class="bg-blue-50 rounded-lg p-4 mt-4 hidden">
+        <h4 class="font-medium text-blue-900 mb-1">Summary</h4>
+        <p id="result-summary" class="text-blue-800 text-sm"></p>
+      </div>
+
+      <!-- Export Buttons -->
+      <div class="flex space-x-3 mt-4">
+        <button class="export-btn flex-1 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium" data-format="txt">
+          📄 TXT
+        </button>
+        <button class="export-btn flex-1 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium" data-format="srt">
+          🎬 SRT
+        </button>
+        <button class="export-btn flex-1 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium" data-format="vtt">
+          🌐 VTT
+        </button>
+        <button class="export-btn flex-1 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium" data-format="json">
+          { } JSON
+        </button>
+        <button id="btn-copy" class="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium">
+          📋 Copy
+        </button>
+      </div>
+    </div>
+
+    <!-- Error Section -->
+    <div id="error-section" class="hidden">
+      <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+        <div class="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-medium text-red-800 mb-2">Transcription Failed</h3>
+        <p id="error-message" class="text-red-600 mb-4"></p>
+        <button id="btn-retry" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+          Try Again
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-400 text-sm py-6">
+    Powered by Gemini AI • Running locally on your machine
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

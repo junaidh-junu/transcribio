@@ -1,0 +1,59 @@
+{
+  "name": "transcribio",
+  "version": "1.0.0",
+  "description": "AI-powered audio transcription using Gemini - CLI & Web UI",
+  "author": "Junaidh Haneefa",
+  "license": "MIT",
+  "keywords": [
+    "transcription",
+    "audio",
+    "speech-to-text",
+    "gemini",
+    "ai",
+    "cli",
+    "subtitle",
+    "srt",
+    "vtt"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/junaidh-junu/transcribio.git"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "transcribio": "./bin/transcribio.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node bin/transcribio.js ui",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint src",
+    "prepublishOnly": "npm test"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "conf": "^12.0.0",
+    "express": "^4.18.0",
+    "inquirer": "^9.0.0",
+    "mime-types": "^2.1.35",
+    "multer": "^1.4.5-lts.1",
+    "open": "^10.0.0",
+    "ora": "^8.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "vitest": "^1.0.0"
+  }
+}
