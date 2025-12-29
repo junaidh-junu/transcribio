@@ -5,7 +5,9 @@
 Transcribio is a **free, open-source NPM package** that transcribes audio files using Google's Gemini AI. It offers both a powerful CLI for developers and a beautiful web UI for everyone.
 
 ### Key Innovation
+
 Instead of building a web service with hosting costs, Transcribio runs entirely on the user's machine. Users install via NPM and use their own free Gemini API key. This means:
+
 - **Zero hosting costs** for you
 - **Free for users** (Gemini's generous free tier)
 - **Privacy-focused** (audio never touches any server except Gemini)
@@ -62,6 +64,7 @@ transcribio/
 ## Tech Stack
 
 ### Backend (Node.js)
+
 - **@google/generative-ai** - Official Gemini SDK
 - **commander** - CLI argument parsing
 - **inquirer** - Interactive CLI prompts
@@ -72,11 +75,13 @@ transcribio/
 - **multer** - File upload handling
 
 ### Frontend (Vanilla JS)
+
 - **Tailwind CSS** (via CDN) - Styling
 - **Vanilla JavaScript** - No framework needed
 - **Drag & Drop API** - File uploads
 
 ### Development
+
 - **Vitest** - Fast testing framework
 - **ESLint** - Code linting
 - **ES Modules** - Modern JavaScript
@@ -84,6 +89,7 @@ transcribio/
 ## Features Implemented
 
 ### ✅ Core Features
+
 - [x] Audio transcription using Gemini API
 - [x] Speaker detection and diarization
 - [x] Timestamp generation (MM:SS format)
@@ -92,12 +98,14 @@ transcribio/
 - [x] Translation support
 
 ### ✅ Export Formats
+
 - [x] TXT (Plain text with timestamps)
 - [x] SRT (SubRip subtitles)
 - [x] VTT (WebVTT subtitles)
 - [x] JSON (Complete data structure)
 
 ### ✅ CLI Interface
+
 - [x] Transcribe command with options
 - [x] Configuration management
 - [x] API key encryption
@@ -106,6 +114,7 @@ transcribio/
 - [x] Error handling
 
 ### ✅ Web Interface
+
 - [x] Local web server (Express)
 - [x] Drag & drop file upload
 - [x] Real-time progress
@@ -115,6 +124,7 @@ transcribio/
 - [x] Responsive design
 
 ### ✅ Developer Experience
+
 - [x] Comprehensive README
 - [x] Quick start guide
 - [x] Contributing guide
@@ -153,15 +163,18 @@ transcribio ui
 ### 3. Technical Flow
 
 1. **Audio File Input**
+
    - User provides audio file path (CLI) or uploads (Web)
    - File is validated (format, size)
 
 2. **Gemini Processing**
+
    - Small files (<20MB): Sent as base64 inline data
    - Large files (>20MB): Uploaded via File API
    - Prompt instructs Gemini on format and options
 
 3. **Response Parsing**
+
    - Gemini returns JSON with segments, speakers, timestamps
    - Error handling for invalid responses
    - Data validation
@@ -187,8 +200,8 @@ const result = await gemini.generateContent(uploadedFile);
 ```javascript
 // Encrypted storage using crypto module
 function encrypt(text) {
-  const cipher = crypto.createCipher('aes-256-cbc', ENCRYPTION_KEY);
-  return cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+  const cipher = crypto.createCipher("aes-256-cbc", ENCRYPTION_KEY);
+  return cipher.update(text, "utf8", "hex") + cipher.final("hex");
 }
 
 // Stored in user's home directory via 'conf' package
@@ -206,6 +219,7 @@ npm run test:coverage
 ```
 
 Tests cover:
+
 - All export formats (TXT, SRT, VTT, JSON)
 - Edge cases (empty results, missing data)
 - Format validation
@@ -216,30 +230,35 @@ Tests cover:
 ### Skills Demonstrated
 
 1. **Node.js Expertise**
+
    - ES Modules
    - File system operations
    - Async/await patterns
    - Error handling
 
 2. **API Integration**
+
    - Google Gemini API
    - File uploads
    - Response parsing
    - Rate limiting awareness
 
 3. **CLI Development**
+
    - Argument parsing
    - Interactive prompts
    - Progress indicators
    - User experience
 
 4. **Web Development**
+
    - Express server
    - REST API design
    - Frontend JavaScript
    - Responsive UI
 
 5. **Package Publishing**
+
    - NPM package structure
    - Versioning
    - Documentation
@@ -265,6 +284,7 @@ Tests cover:
 While Transcribio is free, you could monetize:
 
 1. **Premium Features** (paid tier)
+
    - Batch processing
    - Priority support
    - Advanced features
@@ -280,6 +300,7 @@ While Transcribio is free, you could monetize:
 ### Before Publishing to NPM
 
 1. **Test Thoroughly**
+
    ```bash
    # Test all commands
    npm test
@@ -288,11 +309,13 @@ While Transcribio is free, you could monetize:
    ```
 
 2. **Create GitHub Repo**
+
    - Add description and topics
    - Add screenshots to README
    - Create demo GIF/video
 
 3. **Verify package.json**
+
    - Author: Junaidh Haneefa ✓
    - Repository URL: https://github.com/junaidh-junu/transcribio.git ✓
    - Version: 1.0.0 ✓
@@ -306,12 +329,14 @@ While Transcribio is free, you could monetize:
 ### After Publishing
 
 1. **Marketing**
+
    - Post on Reddit (r/javascript, r/node)
    - Tweet about it
    - Share on LinkedIn
    - Add to portfolio website
 
 2. **Community**
+
    - Respond to issues
    - Accept pull requests
    - Update documentation
@@ -325,12 +350,13 @@ While Transcribio is free, you could monetize:
 
 ### Free Tier (as of 2024)
 
-| Model | Requests/Day | Speed | Best For |
-|-------|-------------|-------|----------|
-| Gemini Flash | ~1,000 | Fast | Most users |
-| Gemini Pro | ~50 | Slower | High accuracy needs |
+| Model        | Requests/Day | Speed  | Best For            |
+| ------------ | ------------ | ------ | ------------------- |
+| Gemini Flash | ~1,000       | Fast   | Most users          |
+| Gemini Pro   | ~50          | Slower | High accuracy needs |
 
 This is **more than enough** for:
+
 - Personal podcast transcription
 - Interview processing
 - Meeting notes
@@ -349,6 +375,7 @@ Track these after publishing:
 ## Final Thoughts
 
 Transcribio demonstrates:
+
 - ✅ Full-stack development (CLI + Web + API)
 - ✅ Modern JavaScript (ES modules, async/await)
 - ✅ AI integration (Gemini API)

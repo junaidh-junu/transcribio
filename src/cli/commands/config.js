@@ -53,7 +53,7 @@ export async function configCommand(options) {
     console.log(chalk.cyan('  ⚙️  Configuration'));
     console.log(chalk.gray('  ─────────────────────────────────'));
     console.log(`  API Key: ${hasKey ? chalk.green('Configured ✔') : chalk.red('Not set ✖')}`);
-    console.log(`  Default Model: ${chalk.white(configStore.get('defaultModel') || 'flash')}`);
+    console.log(`  Default Model: ${chalk.white(configStore.get('defaultModel') || 'lite')}`);
     console.log(`  Default Format: ${chalk.white(configStore.get('defaultFormat') || 'txt')}`);
     console.log(`  Config Path: ${chalk.gray(configStore.getPath())}`);
     console.log('');

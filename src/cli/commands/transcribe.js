@@ -49,7 +49,16 @@ export async function transcribeCommand(file, options) {
   console.log(chalk.gray('  ─────────────────────────────────'));
   console.log(`  File: ${chalk.white(fileName)}`);
   console.log(`  Size: ${chalk.white(fileSizeMB + ' MB')}`);
-  console.log(`  Model: ${chalk.white(options.model === 'pro' ? 'Gemini Pro' : 'Gemini Flash')}`);
+  const modelDisplayNames = {
+    'lite': 'Gemini 2.5 Flash Lite',
+    'flash-lite': 'Gemini 2.5 Flash Lite',
+    'flash': 'Gemini 2.5 Flash',
+    'flash-3': 'Gemini 3 Flash',
+    'flash3': 'Gemini 3 Flash',
+    'pro': 'Gemini Pro'
+  };
+  const modelDisplay = modelDisplayNames[options.model] || 'Gemini 2.5 Flash Lite';
+  console.log(`  Model: ${chalk.white(modelDisplay)}`);
   console.log('');
 
   const spinner = ora({
@@ -58,7 +67,9 @@ export async function transcribeCommand(file, options) {
   }).start();
 
   try {
+    console.log(chalk.gray('[CLI] Initializing Gemini service...'));
     const gemini = new GeminiService();
+    console.log(chalk.gray('[CLI] Service initialized, starting transcription...'));
 
     const startTime = Date.now();
     const result = await gemini.transcribe(filePath, {
@@ -71,6 +82,7 @@ export async function transcribeCommand(file, options) {
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
 
     spinner.succeed(chalk.green(`Transcription complete! (${elapsed}s)`));
+    console.log(chalk.gray(`[CLI] Total time: ${elapsed}s`));
 
     // Display metadata
     if (result.language) {
@@ -110,11 +122,33 @@ export async function transcribeCommand(file, options) {
   } catch (error) {
     spinner.fail(chalk.red('Transcription failed'));
     console.log('');
-    console.log(chalk.red('  Error: ' + error.message));
-
-    if (error.message.includes('API key')) {
+    console.log(chalk.gray(`[CLI] Error occurred: ${error.message}`));
+    
+    // Handle rate limit/quota errors with helpful guidance
+    if (error.message.includes('quota') || error.message.includes('Rate limit')) {
+      console.log(chalk.red('  ⚠️  Rate Limit / Quota Exceeded'));
       console.log('');
-      console.log('  Check your API key: ' + chalk.cyan('transcribio config --show'));
+      console.log(chalk.yellow('  ' + error.message.split('\n')[0]));
+      console.log('');
+      console.log('  To check your usage and billing:');
+      console.log('  ' + chalk.cyan('https://ai.dev/usage?tab=rate-limit'));
+      console.log('');
+      console.log('  For more information about rate limits:');
+      console.log('  ' + chalk.cyan('https://ai.google.dev/gemini-api/docs/rate-limits'));
+      console.log('');
+      if (error.originalError?.message?.includes('retry')) {
+        const retryMatch = error.originalError.message.match(/Please retry in ([\d.]+)s/i);
+        if (retryMatch) {
+          console.log(chalk.gray(`  The API suggests retrying after ${retryMatch[1]} seconds.`));
+        }
+      }
+    } else {
+      console.log(chalk.red('  Error: ' + error.message));
+
+      if (error.message.includes('API key')) {
+        console.log('');
+        console.log('  Check your API key: ' + chalk.cyan('transcribio config --show'));
+      }
     }
 
     console.log('');

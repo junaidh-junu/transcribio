@@ -29,7 +29,7 @@ const config = new Conf({
   projectName: 'transcribio',
   schema: {
     apiKey: { type: 'string', default: '' },
-    defaultModel: { type: 'string', default: 'flash' },
+    defaultModel: { type: 'string', default: 'lite' },
     defaultFormat: { type: 'string', default: 'txt' },
     speakersDefault: { type: 'boolean', default: true },
     timestampsDefault: { type: 'boolean', default: true }

@@ -30,7 +30,7 @@ export function run(argv) {
     .option('-o, --output <format>', 'Output format (txt, srt, vtt, json)', 'txt')
     .option('-f, --file <path>', 'Save output to file')
     .option('--translate <lang>', 'Translate to language')
-    .option('--model <name>', 'Model to use (flash, pro)', 'flash')
+    .option('--model <name>', 'Model to use (lite, flash, flash-3, pro)', 'lite')
     .action(transcribeCommand);
 
   // Config command
